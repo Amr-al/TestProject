@@ -41,6 +41,40 @@ const unsigned char enemy[] ={
 
 };
 
-int main(void){
+#define carW        ((unsigned char)car[18])// h=10,w=14
+#define carH        ((unsigned char)car[22])
+#define enemyW        ((unsigned char)enemy[18])
+#define enemyH        ((unsigned char)enemy[22])
 
-}
+
+// ***************************** Variables ************************ //
+
+int  y,speed=1 ;     
+int eMove,Y_position,Y_position2;  //enemies position and movement
+int tracks[3] = {10, 28, 46};          //
+int score;
+
+int main(void){
+ 
+ // ******************** initializations ***************************** //
+ PortF_Init();
+ 
+ y = 28;  //mid screean y = 28
+ eMove = 84-enemyW;
+
+
+ score = 0;
+ 
+  TExaS_Init(SSI0_Real_Nokia5110_Scope);  // set system clock to 80 MHz
+ Random_Init(1);
+ 
+ 
+ Y_position = rand()%3;
+ Y_position2= rand()%3;
+ if(Y_position==Y_position2)Y_position2 =(Y_position2+1)%3 ;
+  Nokia5110_Init();
+  Nokia5110_ClearBuffer();
+ Nokia5110_DisplayBuffer();      // draw buffer
+ 
+ // ***************************** Welcome screen *************************** //
+ Nokia5110_Clear();
