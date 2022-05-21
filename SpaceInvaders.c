@@ -78,7 +78,34 @@ int main(void){
  
  // ***************************** Welcome screen *************************** //
  Nokia5110_Clear();
-if(eMove <= 0){
+Nokia5110_SetCursor(0, 2);
+  Nokia5110_OutString("starting the");
+  Nokia5110_SetCursor(1, 3);
+ Nokia5110_OutString("racing game");
+
+
+  Delay100ms(50);
+
+ // ***************************** Some delay before begining ************************ //
+ Nokia5110_ClearBuffer();
+ Nokia5110_PrintBMP(0, y, car, 0);
+ Nokia5110_DisplayBuffer();
+ Delay100ms(30);
+ 
+ // ***************************** Game loop ************************ //
+ while(1){
+  
+  Nokia5110_ClearBuffer();  
+  
+         //***************** enemy movement ********************
+  Nokia5110_PrintBMP(0,y, car, 0);
+  if(eMove > 0){
+   Nokia5110_PrintBMP(eMove, tracks[Y_position], enemy, 0);
+   Nokia5110_PrintBMP(eMove, tracks[Y_position2], enemy, 0);
+   eMove-=speed;
+  }
+  
+  if(eMove <= 0){
    
     score++;     //number of passed enemys
     Y_position = rand()%3;
@@ -120,15 +147,3 @@ if(eMove <= 0){
 }
 //end of main
 
-void PortF_Init(void){ volatile unsigned long delay;
-  SYSCTL_RCGC2_R |= 1<<5;     // 1) F clock
-  delay = SYSCTL_RCGC2_R;           // delay   
-  GPIO_PORTF_LOCK_R = 0x4C4F434B;   // 2) unlock PortF PF0  
-  GPIO_PORTF_CR_R = 0x1F;           // allow changes to PF4-0       
-  GPIO_PORTF_AMSEL_R = 0x00;        // 3) disable analog function
-  GPIO_PORTF_PCTL_R = 0x00000000;   // 4) GPIO clear bit PCTL  
-  GPIO_PORTF_DIR_R =1<<1 | 1<<2 | 1<<3;          // 5) PF4,PF0 input, PF3,PF2,PF1 output   
-  GPIO_PORTF_AFSEL_R =0x00;       // 6) no alternate function
-  GPIO_PORTF_PUR_R = 0x11;          // enable pullup resistors on PF4,PF0       
-  GPIO_PORTF_DEN_R = 0x1F;          // 7) enable digital pins PF4-PF0
- }
